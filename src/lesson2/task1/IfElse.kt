@@ -83,7 +83,7 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = when(age / 10 % 10){
+fun ageDescription(age: Int): String = when(age / 10 % 10) {
     1 -> "$age лет"
     else -> {
         when(age % 10) {
@@ -105,10 +105,14 @@ fun ageDescription(age: Int): String = when(age / 10 % 10){
  */
 fun timeForHalfWay(t1: Double, v1: Double,
                    t2: Double, v2: Double,
-                   t3: Double, v3: Double): Double = when {
-        (v1 * t1 + v2 * t2 + v3 * t3) / 2.0 <= v1 * t1 -> (v1 * t1 + v2 * t2 + v3 * t3) / 2.0 / v1
-        (v1 * t1 + v2 * t2 + v3 * t3) / 2.0 <= v1 * t1 + v2 * t2 -> ((v1 * t1 + v2 * t2 + v3 * t3) / 2.0 - v1 * t1) / v2 + t1
-        else -> ((v1 * t1 + v2 * t2 + v3 * t3) / 2.0 - v1 * t1 - v2 * t2) / v3 + t1 + t2
+                   t3: Double, v3: Double): Double {
+    val shift = (v1 * t1 + v2 * t2 + v3 * t3) / 2.0
+    val funResult = when {
+        shift <= v1 * t1 -> shift / v1
+        shift <= v1 * t1 + v2 * t2 -> (shift - v1 * t1) / v2 + t1
+        else -> (shift - v1 * t1 - v2 * t2) / v3 + t1 + t2
+    }
+    return funResult
 }
 
 
@@ -159,8 +163,8 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int = when {
     (a + b <= c || a + c <= b || b + c <= a) -> -1
-    ((a*a + b*b == c*c) || (a*a == b*b + c*c) || (b*b == a*a + c*c)) -> 1
-    (c*c > a*a + b*b || a*a > b*b + c*c || b*b > a*a + c*c) -> 2
+    ((a * a + b * b == c * c) || (a * a == b * b + c * c) || (b * b == a * a + c * c)) -> 1
+    (c * c > a * a + b * b || a * a > b * b + c * c || b * b > a * a + c * c) -> 2
     else -> 0
 }
 
