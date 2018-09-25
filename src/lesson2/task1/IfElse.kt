@@ -107,12 +107,11 @@ fun timeForHalfWay(t1: Double, v1: Double,
                    t2: Double, v2: Double,
                    t3: Double, v3: Double): Double {
     val shift = (v1 * t1 + v2 * t2 + v3 * t3) / 2.0
-    val funResult = when {
+    return when {
         shift <= v1 * t1 -> shift / v1
         shift <= v1 * t1 + v2 * t2 -> (shift - v1 * t1) / v2 + t1
         else -> (shift - v1 * t1 - v2 * t2) / v3 + t1 + t2
     }
-    return funResult
 }
 
 
