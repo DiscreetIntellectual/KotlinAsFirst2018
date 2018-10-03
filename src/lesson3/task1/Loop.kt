@@ -10,8 +10,8 @@ import kotlin.math.PI
 fun main(args: Array<String>){
     println(digitNumber(65536))
     println(Int.MAX_VALUE)
-    println(fib(5))
-    println(lcm (12, 9))
+    println(fib(7))
+    println(lcm (4, 10))
     println(minDivisor(4))
     println(maxDivisor(6))
     println(isCoPrime(13, 27))
@@ -23,6 +23,7 @@ fun main(args: Array<String>){
     println(revert(19))
     println(isPalindrome(505))
     println(hasDifferentDigits(66))
+    println(cos(-PI / 3, 1e-5))
 }
 /**
  * Пример
@@ -103,7 +104,13 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    if (n in 1..2) return 1 else return fib(n - 1) + fib(n - 2)
+    var ans = 1
+    var second = 1; var third = 1
+    for (i:Int in 3..n){
+        ans = second + third
+        third = second; second = ans
+    }
+    return ans
 }
 
 /**
@@ -113,10 +120,13 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int{
-    for (i in max(m, n)..m * n){
-        if (i % m == 0 && i % n == 0) return i
+    var x = m; var y = n
+    while (x > 0 && y > 0){
+        if (x > y)
+            x %= y
+        else y %= x
     }
-    return m * n
+    return m * n / max(x, y)
 }
 
 /**
@@ -205,16 +215,15 @@ fun collatzSteps(x: Int): Int {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double {
-    val y = x % (PI * 2)
+    var y = x % (PI * 2)
+    if (y < 0)
+        y += 2 * PI
     var power = 1.0
     var next = y
     var ans = next
     while (abs(next) > eps) {
         power += 2.0
-        if (next > 0)
-            next = -(pow(y, power) / factorial(power.toInt()))
-        else
-            next = (pow(y, power) / factorial(power.toInt()))
+        next *= -(y * y / (power * (power - 1)))
         ans += next
     }
     return ans
@@ -228,16 +237,15 @@ fun sin(x: Double, eps: Double): Double {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun cos(x: Double, eps: Double): Double {
-    val y = x % (PI * 2)
+    var y = x % (PI * 2)
+    if (y < 0)
+        y += 2 * PI
     var power = 0.0
     var next = 1.0
     var ans = next
     while (abs(next) > eps) {
         power += 2.0
-        if (next > 0)
-            next = -(pow(y, power) / factorial(power.toInt()))
-        else
-            next = (pow(y, power) / factorial(power.toInt()))
+        next *= -(y * y / (power * (power - 1)))
         ans += next
     }
     return ans
