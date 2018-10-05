@@ -21,9 +21,10 @@ fun main(args: Array<String>){
     println(sin(100 * PI, 1e-5))
     println(cos(PI * 1000000000, 1e-5))
     println(revert(19))
-    println(isPalindrome(505))
+    println(isPalindrome(656030656))
     println(hasDifferentDigits(66))
     println(cos(-PI / 3, 1e-5))
+    print(isPalindrome(666)); print(isPalindrome(605030506))
 }
 /**
  * Пример
@@ -281,11 +282,11 @@ fun isPalindrome(n: Int): Boolean {
     val count = digitNumber(n)
     if (count % 2 == 0){
         val half = pow(10.0, count / 2.0).toInt()
-        if (n / half == revert(n % half)) return true
+        if (n % half == revert(n / half)) return true
     }
     else{
         val half = pow(10.0, (count / 2).toDouble()).toInt()
-        if (n / (half * 10) == revert(n % half)) return true
+        if ( revert(n / (half * 10)) == n % half ) return true
     }
     return false
 }
