@@ -19,10 +19,12 @@ fun main(args: Array<String>){
     println(collatzSteps(2))
     println(sin(100 * PI, 1e-5))
     println(cos(PI * 1000000000, 1e-5))
-    println(revert(19))
-    println(isPalindrome(656030656))
-    println(hasDifferentDigits(66))
-    println(cos(-PI / 3, 1e-5))
+    //println(revert(19))
+    //println(isPalindrome(656030656))
+    //println(hasDifferentDigits(66))
+    //println(cos(-PI / 3, 1e-5))
+    //println(isPalindrome(1784334871))
+    println("${1784334871} != ${revert(1784334871)}")
 }
 /**
  * Пример
@@ -258,7 +260,8 @@ fun revert(n: Int): Int {
     var power = 1
     while (n / power > 0) {
         ans = ans * 10 + n / power % 10
-        power *= 10
+        if (power < Int.MAX_VALUE / 10) power *= 10
+        else power = Int.MAX_VALUE
     }
     return ans
 }
