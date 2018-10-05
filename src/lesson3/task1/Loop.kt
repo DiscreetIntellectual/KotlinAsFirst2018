@@ -5,11 +5,10 @@ import java.lang.Math.pow
 import kotlin.math.sqrt
 import kotlin.math.max
 import kotlin.math.abs
+import kotlin.math.min
 import kotlin.math.PI
 
 fun main(args: Array<String>){
-    println(digitNumber(65536))
-    println(Int.MAX_VALUE)
     println(fib(7))
     println(lcm (4, 10))
     println(minDivisor(4))
@@ -24,7 +23,6 @@ fun main(args: Array<String>){
     println(isPalindrome(656030656))
     println(hasDifferentDigits(66))
     println(cos(-PI / 3, 1e-5))
-    print(isPalindrome(666)); print(isPalindrome(605030506))
 }
 /**
  * Пример
@@ -107,9 +105,10 @@ fun digitNumber(n: Int): Int {
 fun fib(n: Int): Int {
     var ans = 1
     var second = 1; var third = 1
-    for (i:Int in 3..n){
+    for (i in 3..n){
         ans = second + third
-        third = second; second = ans
+        third = second
+        second = ans
     }
     return ans
 }
@@ -147,12 +146,7 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    for (i in n - 1 downTo 2){
-        if (n % i == 0) return i
-    }
-    return 1
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
 
 /**
  * Простая
@@ -162,7 +156,7 @@ fun maxDivisor(n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    for (i in 2..kotlin.math.min(m, n))
+    for (i in 2..min(m, n))
         if (m % i == 0 && n % i == 0) return false
     return true
 }
@@ -197,7 +191,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * этого для какого-либо начального X > 0.
  */
 fun collatzSteps(x: Int): Int {
-    var y:Int = x; var count = 0
+    var y = x; var count = 0
     while (y != 1){
         count++
         if (y % 2 == 0)
@@ -278,18 +272,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    val count = digitNumber(n)
-    if (count % 2 == 0){
-        val half = pow(10.0, count / 2.0).toInt()
-        if (n % half == revert(n / half)) return true
-    }
-    else{
-        val half = pow(10.0, (count / 2).toDouble()).toInt()
-        if ( revert(n / (half * 10)) == n % half ) return true
-    }
-    return false
-}
+fun isPalindrome(n: Int): Boolean = (n == revert(n))
 
 /**
  * Средняя
@@ -304,8 +287,7 @@ fun hasDifferentDigits(n: Int): Boolean {
     if (x == digit) return false
     while (x % 10 == digit)
         x /= 10
-    if (x == 0) return false
-    return true
+    return x != 0
 }
 
 /**
