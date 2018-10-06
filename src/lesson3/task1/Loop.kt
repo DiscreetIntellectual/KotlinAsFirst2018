@@ -19,6 +19,8 @@ fun main(args: Array<String>){
     println(collatzSteps(2))
     println(sin(100 * PI, 1e-5))
     println(cos(PI * 1000000000, 1e-5))
+    println(squareSequenceDigit(2))
+    println(fibSequenceDigit(10000))
 }
 /**
  * Пример
@@ -295,7 +297,16 @@ fun hasDifferentDigits(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var current = 1
+    var length = 1
+    while (length < n){
+        current++
+        length += digitNumber(current * current)
+    }
+    current *= current
+    return (current / pow(10.0, (length - n).toDouble()).toInt()) % 10
+}
 
 /**
  * Сложная
@@ -306,4 +317,13 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var current = 1
+    var length = 1
+    while (length < n){
+        current++
+        length += digitNumber(fib(current))
+    }
+    current = fib(current)
+    return (current / pow(10.0, (length - n).toDouble()).toInt()) % 10
+}
