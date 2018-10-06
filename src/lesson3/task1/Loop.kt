@@ -19,14 +19,6 @@ fun main(args: Array<String>){
     println(collatzSteps(2))
     println(sin(100 * PI, 1e-5))
     println(cos(PI * 1000000000, 1e-5))
-    //println(revert(19))
-    //println(isPalindrome(656030656))
-    //println(hasDifferentDigits(66))
-    //println(cos(-PI / 3, 1e-5))
-    //println(isPalindrome(1784334871))
-    //println("${1784334871} != ${revert(1784334871)}")
-    println(revert(Int.MAX_VALUE))
-    println(isPalindrome(Int.MAX_VALUE))
 }
 /**
  * Пример
@@ -257,12 +249,12 @@ fun cos(x: Double, eps: Double): Double {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Long {  // Когда тесты пытаются сделать revert от Int.MAX_VALUE, ответ получается больше чем Int
-    var ans:Long = 0
-    var power:Long = 1
-    while (n / power > 0) {
-        ans = ans * 10 + n / power % 10
-        power *= 10
+fun revert(n: Int): Int {
+    var ans = 0
+    var m = n
+    while (m > 0) {
+        ans = ans * 10 + m % 10
+        m /= 10
     }
     return ans
 }
@@ -276,7 +268,7 @@ fun revert(n: Int): Long {  // Когда тесты пытаются сдела
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = (n.toLong() == revert(n))
+fun isPalindrome(n: Int): Boolean = (n == revert(n))
 
 /**
  * Средняя
