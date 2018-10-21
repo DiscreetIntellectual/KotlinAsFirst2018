@@ -11,6 +11,7 @@ import kotlin.math.pow
 fun main(args: Array<String>) {
     println("Neutral spam KKona")
     println(roman(979))
+    println(russian(400849))
 }
 
 /**
@@ -317,4 +318,39 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    var str = ""
+    val digits1 = listOf("", "один", "два", "три", "четыре", "пять", "шесть", "семь",
+            "восемь", "девять")
+    val digits2 = listOf("", "одна ", "две ", "три ", "четыре ", "пять ", "шесть ", "семь ",
+            "восемь ", "девять ")
+    val teens = listOf("десять ", "одиннадцать ", "двенадцать ", "тринадцать ", "четырнадцать ",
+            "пятадцать ", "шестнадцать ", "семнадцать ", "восемнадцать ", "девятнадцать ")
+    val decades = listOf("", "десять ", "двадцать ", "тридцать ", "сорок ", "пятьдесят ",
+            "шестьдесят ", "семьдесят ", "восемьдесят ", "девяносто ")
+    val hundreds = listOf("", "сто ", "двести ", "триста ", "четыреста ", "пятьсот ",
+            "шестьсот ", "семьсот ", "восемьсот ", "девятьсот ")
+    val thousand = (n / 1000) % 1000
+    if (thousand > 0){
+        str += hundreds[thousand / 100 % 10]
+        if ((thousand / 10) % 10 == 1){
+            str += teens[thousand % 10]
+            str += "тысяч "
+        }
+        else{
+            str += decades[thousand / 10 % 10] + digits2[thousand % 10]
+            str += when (thousand % 10){
+                1 -> "тысяча "
+                2, 3, 4 -> "тысячи "
+                else -> "тысяч "
+            }
+        }
+    }
+    val hun = n % 1000
+    str += hundreds[hun / 100 % 10]
+    if ((hun / 10) % 10 == 1)
+        str += teens[hun % 10]
+    else
+        str += decades[hun / 10 % 10] + digits1[hun % 10]
+    return str.removeSuffix(" ")
+}
