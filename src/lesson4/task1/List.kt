@@ -332,7 +332,7 @@ fun russian(n: Int): String {
             "шестьсот ", "семьсот ", "восемьсот ", "девятьсот ")
     val thousand = (n / 1000) % 1000
     if (thousand > 0){
-        str += hundreds[thousand / 100 % 10]
+        str += hundreds[(thousand / 100) % 10]
         if ((thousand / 10) % 10 == 1){
             str += teens[thousand % 10]
             str += "тысяч "
