@@ -124,7 +124,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = sqrt(v.map { it * it } .sum())
+fun abs(v: List<Double>): Double = sqrt(v.sumByDouble { it * it })
 
 /**
  * Простая
@@ -144,8 +144,7 @@ fun mean(list: List<Double>): Double = list.sum() / max(list.size, 1)
 fun center(list: MutableList<Double>): MutableList<Double> {
     if (list.isEmpty()) return list
     val avg = mean(list)
-    for (i in 0 until list.size)
-        list[i] -= avg
+    list.replaceAll{it - avg}
     return list
 }
 
@@ -162,6 +161,7 @@ fun times(a: List<Double>, b: List<Double>): Double {
     for (i in 0 until a.size)
         result += a[i] * b[i]
     return result
+
 }
 
 /**
@@ -192,7 +192,7 @@ fun polynom(p: List<Double>, x: Double): Double {
 fun accumulate(list: MutableList<Double>): MutableList<Double> {
     if (list.isEmpty()) return list
     var additive = list[0]
-    for (i in 1 until list.size) {
+    for (i in 1 until list.size){
         list[i] += additive
         additive += list[i] - additive
     }
@@ -226,10 +226,8 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    val list = factorize(n)
-    return list.joinToString(separator = "*")
-}
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
+
 
 /**
  * Средняя
@@ -239,18 +237,14 @@ fun factorizeToString(n: Int): String {
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
-    var basePower = base.toLong()
-    while (n >= basePower)
-        basePower *= base
-    basePower /= base
     var x = n
-    val list = mutableListOf<Int>()
-    while (basePower > 0){
-        list.add(x / basePower.toInt())
-        x %= basePower.toInt()
-        basePower /= base
+    val res = mutableListOf<Int>()
+    while (x >= base) {
+        res.add(x % base)
+        x /= base
     }
-    return list
+    res.add(x)
+    return res.reversed()
 }
 
 /**
@@ -261,7 +255,16 @@ fun convert(n: Int, base: Int): List<Int> {
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String = n.toString(radix = base)
+fun convertToString(n: Int, base: Int): String {
+    val translate = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+            "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+            "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
+    val list = convert(n, base)
+    val res = MutableList(list.size){""}
+    for (i in 0 until list.size)
+        res[i] = translate[list[i]]
+    return res.joinToString(separator = "")
+}
 
 /**
  * Средняя
@@ -301,7 +304,7 @@ fun roman(n: Int): String {
     val letter = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
     val number = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
     var result = ""
-    var temp:Int
+    var temp: Int
     for (i in 12 downTo 0){
         temp = y / number[i]
         for (j in 1..temp)
@@ -341,7 +344,7 @@ fun russian(n: Int): String {
             str += decades[thousand / 10 % 10] + digits2[thousand % 10]
             str += when (thousand % 10){
                 1 -> "тысяча "
-                2, 3, 4 -> "тысячи "
+                in 2..4 -> "тысячи "
                 else -> "тысяч "
             }
         }
