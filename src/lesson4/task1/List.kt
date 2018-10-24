@@ -10,8 +10,6 @@ import kotlin.math.pow
 
 fun main(args: Array<String>) {
     println("Neutral spam KKona")
-    println(roman(979))
-    println(russian(400849))
 }
 
 /**
@@ -144,7 +142,7 @@ fun mean(list: List<Double>): Double = list.sum() / max(list.size, 1)
 fun center(list: MutableList<Double>): MutableList<Double> {
     if (list.isEmpty()) return list
     val avg = mean(list)
-    list.replaceAll{it - avg}
+    list.replaceAll{ it - avg }
     return list
 }
 
@@ -157,11 +155,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  */
 fun times(a: List<Double>, b: List<Double>): Double {
     if (a.isEmpty()) return 0.0
-    var result = 0.0
-    for (i in 0 until a.size)
-        result += a[i] * b[i]
-    return result
-
+    return a.mapIndexed { index, it -> it * b[index] } .sum()
 }
 
 /**
@@ -172,12 +166,7 @@ fun times(a: List<Double>, b: List<Double>): Double {
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0.0 при любом x.
  */
-fun polynom(p: List<Double>, x: Double): Double {
-    var result = 0.0
-    for (i in 0 until p.size)
-        result += p[i] * x.pow(i)
-    return result
-}
+fun polynom(p: List<Double>, x: Double): Double = p.mapIndexed { index, it -> it * x.pow(index) } .sum()
 
 /**
  * Средняя
@@ -273,12 +262,8 @@ fun convertToString(n: Int, base: Int): String {
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int {
-    var result = 0
-    for (i in (digits.size - 1) downTo 0)
-        result += digits[digits.size - i - 1] * base.toDouble().pow(i).toInt()
-    return result
-}
+fun decimal(digits: List<Int>, base: Int): Int
+        = digits.mapIndexed { index, it -> it * base.toDouble().pow(digits.size - index - 1).toInt() }.sum()
 
 /**
  * Сложная
@@ -289,7 +274,9 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: str = "13c", base = 14 -> 250
  */
-fun decimalFromString(str: String, base: Int): Int = str.toInt(radix = base)
+fun decimalFromString(str: String, base: Int): Int {
+    return decimal(str.split("").filterNot {it == ""} .map { it.toInt(radix = base) } , base)
+}
 
 /**
  * Сложная
