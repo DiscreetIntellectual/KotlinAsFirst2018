@@ -9,7 +9,10 @@ import kotlin.math.max
 import kotlin.math.pow
 
 fun main(args: Array<String>) {
-    println("Neutral spam KKona")
+    println('b' - 'a')
+    println(convertToString(10, 16))
+    println('0'.toInt())
+    println('a'.toInt())
 }
 
 /**
@@ -142,7 +145,7 @@ fun mean(list: List<Double>): Double = list.sum() / max(list.size, 1)
 fun center(list: MutableList<Double>): MutableList<Double> {
     if (list.isEmpty()) return list
     val avg = mean(list)
-    list.replaceAll{ it - avg }
+    list.replaceAll { it - avg }
     return list
 }
 
@@ -154,7 +157,6 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.0.
  */
 fun times(a: List<Double>, b: List<Double>): Double {
-    if (a.isEmpty()) return 0.0
     return a.mapIndexed { index, it -> it * b[index] } .sum()
 }
 
@@ -245,14 +247,11 @@ fun convert(n: Int, base: Int): List<Int> {
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
 fun convertToString(n: Int, base: Int): String {
-    val translate = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-            "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-            "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
-    val list = convert(n, base)
-    val res = MutableList(list.size){""}
-    for (i in 0 until list.size)
-        res[i] = translate[list[i]]
-    return res.joinToString(separator = "")
+    //val translate = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+    //        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+    //        "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
+    val list = convert(n, base).map { (it + (if (it > 9) 87 else 48)).toChar() }
+    return list.joinToString(separator = "")
 }
 
 /**
@@ -263,7 +262,8 @@ fun convertToString(n: Int, base: Int): String {
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
 fun decimal(digits: List<Int>, base: Int): Int
-        = digits.mapIndexed { index, it -> it * base.toDouble().pow(digits.size - index - 1).toInt() }.sum()
+        = digits.foldRightIndexed(0) { ind, it, el ->
+    el + it * base.toDouble().pow(digits.size - ind - 1).toInt() }
 
 /**
  * Сложная
