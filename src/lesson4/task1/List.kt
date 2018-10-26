@@ -156,9 +156,8 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.0.
  */
-fun times(a: List<Double>, b: List<Double>): Double {
-    return a.mapIndexed { index, it -> it * b[index] } .sum()
-}
+fun times(a: List<Double>, b: List<Double>): Double = a.mapIndexed { index, it -> it * b[index] } .sum()
+
 
 /**
  * Средняя
@@ -246,13 +245,8 @@ fun convert(n: Int, base: Int): List<Int> {
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String {
-    //val translate = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-    //        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-    //        "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
-    val list = convert(n, base).map { (it + (if (it > 9) 87 else 48)).toChar() }
-    return list.joinToString(separator = "")
-}
+fun convertToString(n: Int, base: Int): String = convert(n, base).joinToString(separator = "",
+        transform = {if (it > 9) ('a' + it - 10).toString() else "$it"})
 
 /**
  * Средняя
@@ -261,8 +255,7 @@ fun convertToString(n: Int, base: Int): String {
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int
-        = digits.foldRightIndexed(0) { ind, it, el ->
+fun decimal(digits: List<Int>, base: Int): Int = digits.foldRightIndexed(0) { ind, it, el ->
     el + it * base.toDouble().pow(digits.size - ind - 1).toInt() }
 
 /**
