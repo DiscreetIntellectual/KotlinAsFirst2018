@@ -171,7 +171,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO() /*{
     val res = mutableMapOf<String, MutableList<Double>>()
     for (pair in stockPrices) {
         if (res[pair.first] == null)
@@ -181,6 +181,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
     }
     return res.mapValues { it.value.fold(0.0) { that, init -> init + that } / min(2, it.value.size) }
 }
+*/
 
 /**
  * Средняя
@@ -197,7 +198,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO() /*{
     var minPrice = Double.MAX_VALUE
     var minAns = ""
     for ((key, pair) in stuff){
@@ -209,6 +210,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
     }
     return if (minPrice < Double.MAX_VALUE) minAns else null
 }
+*/
 
 /**
  * Сложная
@@ -268,7 +270,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = (word.toLowerCase().toSet() == chars.toSet())
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = (word.toLowerCase().toSet() == chars.toSet() || word == "")
 
 /**
  * Средняя
