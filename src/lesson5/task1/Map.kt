@@ -3,9 +3,11 @@
 package lesson5.task1
 
 import kotlin.math.min
+import kotlin.math.max
 
 fun main(args: Array<String>) {
-    println("baobab".toSet().toList())
+    println(bagPacking(mapOf("Кубок" to (500 to 2000), "Слиток" to (1000 to 5000)), 850))
+    println(bagPacking(mapOf("1" to (500 to 2000), "2" to (200 to 1488), "3" to (200 to 100)), 700))
 }
 
 /**
@@ -336,4 +338,36 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val backpack = treasures.toSortedMap()
+    val list = MutableList(backpack.keys.size) { 0 to 0 }
+    var k = 0
+    val n = list.size
+    val table = MutableList(n) {""}
+    for ((key, value) in backpack){
+        list[k] = value
+        table[k] = key
+        k++
+    }
+    val dp = MutableList(n + 1) { MutableList(capacity + 1) { 0 } }
+    for (i in 1..n){
+        for (j in 1..capacity){
+            if (j >= list[i - 1].first)
+                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - list[i - 1].first] + list[i - 1].second)
+            else
+                dp[i][j] = dp[i - 1][j]
+        }
+    }
+    //println(dp[n][capacity])
+    val ans = mutableListOf<Int>()
+    var cap = capacity
+    for (i in n downTo 1)
+        if (dp[i][cap] != dp[i - 1][cap]) {
+            ans.add(i - 1)
+            cap -= list[i - 1].first
+        }
+    val answer = mutableSetOf<String>()
+    for (item in ans)
+        answer.add(table[item])
+    return answer
+}
