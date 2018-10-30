@@ -6,8 +6,7 @@ import kotlin.math.min
 import kotlin.math.max
 
 fun main(args: Array<String>) {
-    println(bagPacking(mapOf("Кубок" to (500 to 2000), "Слиток" to (1000 to 5000)), 850))
-    println(bagPacking(mapOf("1" to (500 to 2000), "2" to (200 to 1488), "3" to (200 to 100)), 700))
+    println("screw driver san francisco")
 }
 
 /**
@@ -104,19 +103,12 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val result = mapA.toMutableMap()
-    val checkMap = mapA.mapValues { it ->
-        it.value.split("    ").union(listOf()).toMutableSet() }.toMutableMap()
-    for (key in mapB.keys){
-        if (key in result.keys) {
-            if (mapB[key] !in checkMap[key]!!){
-                result[key] = result[key] + ", ${mapB[key]}"
-                checkMap[key]!!.add(mapB[key]!!)
-            }
-        }
-        else {
-            result[key] = mapB[key]!!
-            checkMap[key] = mutableSetOf(mapB[key]!!)
-        }
+    for ((key, value) in mapB){
+        if (mapA[key] != null && mapA[key] != value)
+            result[key] = result[key] + ", $value"
+        else
+            if (mapA[key] != value)
+                result[key] = value
     }
     return result
 }
@@ -154,13 +146,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    for (key in a.keys)
-        if (b[key] == null || b[key] != a[key])
-            return false
-    return true
-}
-
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = b.entries.containsAll(a.entries)
 /**
  * Средняя
  *
@@ -171,17 +157,9 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO() /*{
-    val res = mutableMapOf<String, MutableList<Double>>()
-    for (pair in stockPrices) {
-        if (res[pair.first] == null)
-            res[pair.first] = mutableListOf(pair.second)
-        else
-            res[pair.first]!!.add(pair.second)
-    }
-    return res.mapValues { it.value.fold(0.0) { that, init -> init + that } / min(2, it.value.size) }
-}
-*/
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = stockPrices.groupBy { it ->
+    it.first }.mapValues { it.value.fold(0.0) { init, that -> init + that.second } / it.value.size }
+
 
 /**
  * Средняя
@@ -198,19 +176,8 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO() /*{
-    var minPrice = Double.MAX_VALUE
-    var minAns = ""
-    for ((key, pair) in stuff){
-        if (pair.first == kind)
-            if (pair.second < minPrice){
-                minPrice = pair.second
-                minAns = key
-            }
-    }
-    return if (minPrice < Double.MAX_VALUE) minAns else null
-}
-*/
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? =
+        stuff.filter { it -> it.value.first == kind }.minBy { it.value.second }?.key
 
 /**
  * Сложная
@@ -270,7 +237,8 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = (word.toLowerCase().toSet() == chars.toSet() || word == "")
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = (chars.toSet().containsAll(word.toLowerCase().toSet()) ||
+        word == "")
 
 /**
  * Средняя
@@ -345,7 +313,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     val list = MutableList(backpack.keys.size) { 0 to 0 }
     var k = 0
     val n = list.size
-    val table = MutableList(n) {""}
+    val table = MutableList(n) { "" }
     for ((key, value) in backpack){
         list[k] = value
         table[k] = key
