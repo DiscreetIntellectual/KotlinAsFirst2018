@@ -126,11 +126,8 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val res = mutableMapOf<Int, MutableList<String>>()
     for ((key, value) in grades)
-        if (res[value] != null)
-            res[value]!!.add(key)
-
-        else
-            res[value] = mutableListOf(key)
+        if (res.getOrPut(value) { mutableListOf(key)} != mutableListOf(key))
+            res[value]?.add(key)
     for (value in res.values)
         value.sortDescending()
     return res
