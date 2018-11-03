@@ -234,8 +234,8 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = (chars.toSet().containsAll(word.toLowerCase().toSet()) ||
-        word == "")
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = (chars.map { it ->
+    it.toLowerCase() }.toSet().containsAll(word.toLowerCase().toSet()) || word == "")
 
 /**
  * Средняя
