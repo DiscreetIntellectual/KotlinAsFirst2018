@@ -103,7 +103,7 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val result = mapA.toMutableMap()
-    for ((key, value) in mapB){
+    for ((key, value) in mapB) {
         if (mapA[key] != null && mapA[key] != value)
             result[key] = result[key] + ", $value"
         else
@@ -126,7 +126,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val res = mutableMapOf<Int, MutableList<String>>()
     for ((key, value) in grades)
-        if (res.getOrPut(value) { mutableListOf(key)} != mutableListOf(key))
+        if (res.getOrPut(value) { mutableListOf(key) } != mutableListOf(key))
             res[value]?.add(key)
     for (value in res.values)
         value.sortDescending()
@@ -144,6 +144,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = b.entries.containsAll(a.entries)
+
 /**
  * Средняя
  *
@@ -154,8 +155,8 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = b.entr
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = stockPrices.groupBy { it ->
-    it.first }.mapValues { it.value.fold(0.0) { init, that -> init + that.second } / it.value.size }
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = stockPrices.
+        groupBy { it.first }.mapValues { it.value.fold(0.0) { init, that -> init + that.second } / it.value.size }
 
 
 /**
@@ -234,8 +235,8 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = (chars.map { it ->
-    it.toLowerCase() }.toSet().containsAll(word.toLowerCase().toSet()) || word == "")
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = (chars.map { it.toLowerCase() }.
+        toSet().containsAll(word.toLowerCase().toSet()) || word == "")
 
 /**
  * Средняя
@@ -311,14 +312,14 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     var k = 0
     val n = list.size
     val table = MutableList(n) { "" }
-    for ((key, value) in backpack){
+    for ((key, value) in backpack) {
         list[k] = value
         table[k] = key
         k++
     }
     val dp = MutableList(n + 1) { MutableList(capacity + 1) { 0 } }
-    for (i in 1..n){
-        for (j in 1..capacity){
+    for (i in 1..n) {
+        for (j in 1..capacity) {
             if (j >= list[i - 1].first)
                 dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - list[i - 1].first] + list[i - 1].second)
             else
