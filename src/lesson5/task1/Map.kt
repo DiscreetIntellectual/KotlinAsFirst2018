@@ -156,7 +156,8 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = b.entr
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = stockPrices.groupBy { it ->
-    it.first }.mapValues { it.value.fold(0.0) { init, that -> init + that.second } / it.value.size }
+    it.first }.mapValues { it.value.fold(0.0) { init, that ->
+    init + that.second } / if (it.value.isNotEmpty()) it.value.size else 1}
 
 
 /**
