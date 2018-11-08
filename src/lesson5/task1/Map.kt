@@ -6,7 +6,7 @@ import kotlin.math.min
 import kotlin.math.max
 
 fun main(args: Array<String>) {
-    println("screw driver san francisco")
+    println(averageStockPrice(listOf("e" to 0.0, "e" to 228.1)))
 }
 
 /**
@@ -155,8 +155,8 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = b.entr
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = stockPrices.
-        groupBy { it.first }.mapValues { it.value.fold(0.0) { init, that -> init + that.second } / it.value.size }
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = stockPrices.groupBy { it ->
+    it.first }.mapValues { it.value.fold(0.0) { init, that -> init + that.second } / it.value.size }
 
 
 /**
