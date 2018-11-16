@@ -2,6 +2,11 @@
 
 package lesson6.task1
 
+import java.lang.IllegalArgumentException
+import java.lang.NullPointerException
+import java.lang.NumberFormatException
+import kotlin.math.max
+
 /**
  * Пример
  *
@@ -43,7 +48,7 @@ fun timeSecondsToStr(seconds: Int): String {
  * Пример: консольный ввод
  */
 fun main(args: Array<String>) {
-    println("Введите время в формате ЧЧ:ММ:СС")
+    /*println("Введите время в формате ЧЧ:ММ:СС")
     val line = readLine()
     if (line != null) {
         val seconds = timeStrToSeconds(line)
@@ -57,6 +62,8 @@ fun main(args: Array<String>) {
     else {
         println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
     }
+    println(String.format("%02d", null))*/
+    println(plusMinus("2 + +31 - 40 + 13"))
 }
 
 
@@ -71,7 +78,26 @@ fun main(args: Array<String>) {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val date = mapOf("января" to "01", "февраля" to "02", "марта" to "03", "апреля" to "04",
+            "мая" to "05", "июня" to "06", "июля" to "07", "августа" to "08", "сентября" to "09", "октября" to "10",
+            "ноября" to "11", "декабря" to "12")
+    val thirty = setOf("апреля", "июня", "сентября", "ноября")
+    try {
+        val list = str.split(" ").toMutableList()
+        if (list.size != 3 || list[1] in thirty && list[0].toInt() > 30 ||
+                list[0].toInt() > 31 || date[list[1]] == null)
+            return ""  // Пришлось вынести проверку несоответствия месяца, так как %s почему-то стабильно выводит null,
+                       // а не кидает исключение
+        if (list[1] == "февраля" && (list[0].toInt() > 29 || (list[0].toInt() == 29 &&
+                        (list[2].toInt() % 4 != 0 ) || (list[2].toInt() % 100 == 0 && list[2].toInt() % 400 != 0))))
+            return ""  // Специально отделил проверку февраля, для читаемости
+        return String.format("%02d.%s.%s", list[0].toInt(), date[list[1]], list[2])
+    }
+    catch (e: NumberFormatException) {
+        return ""
+    }
+}
 
 /**
  * Средняя
@@ -83,7 +109,29 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val date = mapOf("01" to "января", "02" to "февраля", "03" to "марта", "04" to "апреля",
+            "05" to "мая", "06" to "июня", "07" to "июля", "08" to "августа", "09" to "сентября", "10" to "октября",
+            "11" to "ноября", "12" to "декабря")
+    val thirty = setOf("04", "06", "09", "11")
+    try {
+        val list = digital.split(".").toMutableList()
+        if (list.size != 3 || list[1] in thirty && list[0].toInt() > 30 ||
+                list[0].toInt() > 31 || date[list[1]] == null)
+            return ""  // Пришлось вынести проверку несоответствия месяца, так как %s почему-то стабильно выводит null,
+        // а не кидает исключение
+        if (list[1] == "02" && (list[0].toInt() > 29 || (list[0].toInt() == 29 &&
+                        (list[2].toInt() % 4 != 0 ) || (list[2].toInt() % 100 == 0 && list[2].toInt() % 400 != 0))))
+            return ""  // Специально отделил проверку февраля, для читаемости
+        return String.format("%d %s %s", list[0].toInt(), date[list[1]], list[2])
+    }
+    catch (e: NumberFormatException) {
+        return ""
+    }
+    catch (e: IndexOutOfBoundsException) {
+        return ""
+    }
+}
 
 /**
  * Средняя
@@ -97,7 +145,18 @@ fun dateDigitToStr(digital: String): String = TODO()
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    return try {
+        val res = phone.filterNot { it in setOf('-', ' ', '(', ')') }
+        if (res[0] == '+')
+            res.substring(1).toLong()
+        else
+            res.toLong()
+        res
+    } catch (e:NumberFormatException) {
+        ""
+    }
+}
 
 /**
  * Средняя
@@ -109,7 +168,17 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    return try {
+        jumps.split(" ").filterNot { it in setOf("-", "%") }.map { it.toInt() }.max()!!
+    }
+    catch (e: NumberFormatException) {
+        return -1
+    }
+    catch (e: NullPointerException) {
+        return -1
+    }
+}
 
 /**
  * Сложная
@@ -121,7 +190,27 @@ fun bestLongJump(jumps: String): Int = TODO()
  * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
  * При нарушении формата входной строки вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    val list = jumps.split(" ")
+    var ans = -1
+    val symbols = setOf('+', '-', '%')
+    try {
+        for (i in 0 until list.size step 2) {
+            val chars = list[i + 1].toSet()
+            if (!symbols.containsAll(chars))
+                return -1
+            if ('+' in chars)
+                ans = max(ans, list[i].toInt())
+        }
+    }
+    catch (e: NumberFormatException) {
+        return -1
+    }
+    catch (e: IndexOutOfBoundsException) {
+        return -1
+    }
+    return ans
+}
 
 /**
  * Сложная
@@ -132,7 +221,32 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    val list = listOf("+") + expression.split(" ")
+    val numbers = setOf('1', '2', '3', '4', '5', '6', '7', '8', '9', '0')
+    try {
+        var ans = 0
+        for (i in 0 until list.size step 2) {
+            if (!numbers.containsAll(list[i + 1].toList()))
+                throw IllegalArgumentException()
+            if (list[i] == "+")
+                ans += list[i + 1].toInt()
+            else {
+                if (list[i] == "-")
+                    ans -= list[i + 1].toInt()
+                else
+                    throw IllegalArgumentException()
+            }
+        }
+        return ans
+    }
+    catch (e: NumberFormatException){
+        throw IllegalArgumentException()
+    }
+    catch (e: java.lang.IndexOutOfBoundsException){
+        throw IllegalArgumentException()
+    }
+}
 
 /**
  * Сложная
