@@ -153,7 +153,11 @@ fun flattenPhoneNumber(phone: String): String {
         else
             res.toLong()
         res
-    } catch (e:NumberFormatException) {
+    }
+    catch (e: NumberFormatException) {
+        ""
+    }
+    catch (e: StringIndexOutOfBoundsException) {
         ""
     }
 }
