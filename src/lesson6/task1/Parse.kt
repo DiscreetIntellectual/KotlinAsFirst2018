@@ -63,7 +63,7 @@ fun main(args: Array<String>) {
         println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
     }
     println(String.format("%02d", null))*/
-    println(plusMinus("2 + +31 - 40 + 13"))
+    println(bestLongJump("-  - -  %    - 22"))
 }
 
 
@@ -170,7 +170,7 @@ fun flattenPhoneNumber(phone: String): String {
  */
 fun bestLongJump(jumps: String): Int {
     return try {
-        jumps.split(" ").filterNot { it in setOf("-", "%") }.map { it.toInt() }.max()!!
+        jumps.split(" ").filterNot { it in setOf("-", "%", "") }.map { it.toInt() }.max()!!
     }
     catch (e: NumberFormatException) {
         return -1
