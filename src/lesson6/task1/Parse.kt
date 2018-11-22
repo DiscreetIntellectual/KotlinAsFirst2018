@@ -2,10 +2,10 @@
 
 package lesson6.task1
 
-import java.lang.IllegalArgumentException
-import java.lang.NullPointerException
 import java.lang.NumberFormatException
 import kotlin.math.max
+import lesson2.task2.daysInMonth
+import kotlin.IllegalArgumentException
 
 /**
  * Пример
@@ -82,16 +82,11 @@ fun dateStrToDigit(str: String): String {
     val date = mapOf("января" to "01", "февраля" to "02", "марта" to "03", "апреля" to "04",
             "мая" to "05", "июня" to "06", "июля" to "07", "августа" to "08", "сентября" to "09", "октября" to "10",
             "ноября" to "11", "декабря" to "12")
-    val thirty = setOf("апреля", "июня", "сентября", "ноября")
     try {
         val list = str.split(" ").toMutableList()
-        if (list.size != 3 || list[1] in thirty && list[0].toInt() > 30 ||
-                list[0].toInt() > 31 || date[list[1]] == null)
-            return ""  // Пришлось вынести проверку несоответствия месяца, так как %s почему-то стабильно выводит null,
-                       // а не кидает исключение
-        if (list[1] == "февраля" && (list[0].toInt() > 29 || (list[0].toInt() == 29 &&
-                        (list[2].toInt() % 4 != 0 ) || (list[2].toInt() % 100 == 0 && list[2].toInt() % 400 != 0))))
-            return ""  // Специально отделил проверку февраля, для читаемости
+        if (list.size != 3 || date[list[1]] == null ||
+                list[0].toInt() > daysInMonth(date[list[1]]!!.toInt(), list[2].toInt()))
+            return ""
         return String.format("%02d.%s.%s", list[0].toInt(), date[list[1]], list[2])
     }
     catch (e: NumberFormatException) {
@@ -113,16 +108,11 @@ fun dateDigitToStr(digital: String): String {
     val date = mapOf("01" to "января", "02" to "февраля", "03" to "марта", "04" to "апреля",
             "05" to "мая", "06" to "июня", "07" to "июля", "08" to "августа", "09" to "сентября", "10" to "октября",
             "11" to "ноября", "12" to "декабря")
-    val thirty = setOf("04", "06", "09", "11")
     try {
         val list = digital.split(".").toMutableList()
-        if (list.size != 3 || list[1] in thirty && list[0].toInt() > 30 ||
-                list[0].toInt() > 31 || date[list[1]] == null)
-            return ""  // Пришлось вынести проверку несоответствия месяца, так как %s почему-то стабильно выводит null,
-        // а не кидает исключение
-        if (list[1] == "02" && (list[0].toInt() > 29 || (list[0].toInt() == 29 &&
-                        (list[2].toInt() % 4 != 0 ) || (list[2].toInt() % 100 == 0 && list[2].toInt() % 400 != 0))))
-            return ""  // Специально отделил проверку февраля, для читаемости
+        if (list.size != 3 || date[list[1]] == null ||
+                list[0].toInt() > daysInMonth(list[1].toInt(), list[2].toInt()))
+            return ""
         return String.format("%d %s %s", list[0].toInt(), date[list[1]], list[2])
     }
     catch (e: NumberFormatException) {
@@ -145,22 +135,7 @@ fun dateDigitToStr(digital: String): String {
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String {
-    return try {
-        val res = phone.filterNot { it in setOf('-', ' ', '(', ')') }
-        if (res[0] == '+')
-            res.substring(1).toLong()
-        else
-            res.toLong()
-        res
-    }
-    catch (e: NumberFormatException) {
-        ""
-    }
-    catch (e: StringIndexOutOfBoundsException) {
-        ""
-    }
-}
+fun flattenPhoneNumber(phone: String): String = TODO()
 
 /**
  * Средняя
@@ -174,12 +149,9 @@ fun flattenPhoneNumber(phone: String): String {
  */
 fun bestLongJump(jumps: String): Int {
     return try {
-        jumps.split(" ").filterNot { it in setOf("-", "%", "") }.map { it.toInt() }.max()!!
+        (jumps.split(" ").filterNot { it in setOf("-", "%", "") }.map { it.toInt() } + listOf(-1)).max()!!
     }
     catch (e: NumberFormatException) {
-        return -1
-    }
-    catch (e: NullPointerException) {
         return -1
     }
 }
@@ -198,8 +170,11 @@ fun bestHighJump(jumps: String): Int {
     val list = jumps.split(" ")
     var ans = -1
     val symbols = setOf('+', '-', '%')
+    val n = list.size
     try {
-        for (i in 0 until list.size step 2) {
+        for (i in 0 until n step 2) {
+            if (i + 1 >= n)
+                return -1
             val chars = list[i + 1].toSet()
             if (!symbols.containsAll(chars))
                 return -1
@@ -208,9 +183,6 @@ fun bestHighJump(jumps: String): Int {
         }
     }
     catch (e: NumberFormatException) {
-        return -1
-    }
-    catch (e: IndexOutOfBoundsException) {
         return -1
     }
     return ans
@@ -228,26 +200,23 @@ fun bestHighJump(jumps: String): Int {
 fun plusMinus(expression: String): Int {
     val list = listOf("+") + expression.split(" ")
     val numbers = setOf('1', '2', '3', '4', '5', '6', '7', '8', '9', '0')
+    val n = list.size
     try {
         var ans = 0
-        for (i in 0 until list.size step 2) {
+        for (i in 0 until n step 2) {
+            if (i + 1 >= n)
+                throw IllegalArgumentException()
             if (!numbers.containsAll(list[i + 1].toList()))
                 throw IllegalArgumentException()
-            if (list[i] == "+")
-                ans += list[i + 1].toInt()
-            else {
-                if (list[i] == "-")
-                    ans -= list[i + 1].toInt()
-                else
-                    throw IllegalArgumentException()
+            when (list[i]) {
+                "+" -> ans += list[i + 1].toInt()
+                "-" -> ans -= list[i + 1].toInt()
+                else -> throw IllegalArgumentException()
             }
         }
         return ans
     }
     catch (e: NumberFormatException){
-        throw IllegalArgumentException()
-    }
-    catch (e: java.lang.IndexOutOfBoundsException){
         throw IllegalArgumentException()
     }
 }
