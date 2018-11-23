@@ -294,4 +294,38 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    val left = mutableListOf<Int>()
+    val bracketPointers = mutableMapOf<Int, Int>()
+    val n = commands.length
+    val acceptableChars = setOf('+', '-', '>', '<', ' ')
+    for (i in 0 until n) {
+        when (commands[i]) {
+            '[' -> left.add(i)
+            ']' -> if (left.isNotEmpty()) {
+                bracketPointers[i] = left.last()
+                bracketPointers[left.last()] = i
+                left.removeAt(left.size - 1)
+            } else throw IllegalArgumentException()
+            else -> if (commands[i] !in acceptableChars) throw IllegalArgumentException()
+        }
+    }
+    if (left.isNotEmpty()) throw IllegalArgumentException()
+    val ans = MutableList(cells) { 0 }
+    var i = 0
+    var currentCell = cells / 2
+    var limitControl = 0
+    while (i < n && limitControl < limit) {
+        when (commands[i]) {
+            '+' -> ans[currentCell]++
+            '-' -> ans[currentCell]--
+            '>' -> if (++currentCell >= cells) throw IllegalStateException()
+            '<' -> if (--currentCell < 0) throw IllegalStateException()
+            '[' -> if (ans[currentCell] == 0) i = bracketPointers[i]!!
+            ']' -> if (ans[currentCell] != 0) i = bracketPointers[i]!!
+        }
+        i++
+        limitControl++
+    }
+    return ans
+}
