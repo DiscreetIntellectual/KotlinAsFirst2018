@@ -5,7 +5,7 @@ package lesson7.task1
 import java.io.File
 
 fun main(args: Array<String>) {
-    println("a".toRegex().findAll("a a a").toList().map { it.value })
+    println("a".toRegex().findAll("a a a a a").toList().map { it.value })
 }
 
 /**
