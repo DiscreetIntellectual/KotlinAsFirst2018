@@ -57,7 +57,7 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO() /*{
     val text = File(inputName).bufferedReader().readLines().joinToString(separator = "").toLowerCase()
     val ans = mutableMapOf<String, Int>()
     for (i in 0 until substrings.size) {
@@ -65,7 +65,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     }
     return ans
 }
-
+*/
 
 
 /**
@@ -221,7 +221,21 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    TODO()
+    val out = File(outputName).bufferedWriter()
+    val ans = mutableSetOf<String>()
+    val text = File(inputName).bufferedReader().readLines()
+    val unique = text.filter { it.toLowerCase().toList() == it.toLowerCase().toSet().toList() }
+    var len = 0
+    for (item in unique)
+        if (item.length >= len) {
+            if (item.length > len) {
+                ans.clear()
+                len = item.length
+            }
+            ans.add(item)
+        }
+    out.write(ans.joinToString(separator = ", "))
+    out.close()
 }
 
 /**
