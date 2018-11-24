@@ -222,7 +222,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val out = File(outputName).bufferedWriter()
-    val ans = mutableSetOf<String>()
+    val ans = mutableListOf<String>()
     val text = File(inputName).bufferedReader().readLines()
     val unique = text.filter { it.toLowerCase().toList() == it.toLowerCase().toSet().toList() }
     var len = 0
@@ -282,7 +282,6 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
 }
 
 /**
