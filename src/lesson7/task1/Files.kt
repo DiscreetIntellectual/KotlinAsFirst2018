@@ -110,9 +110,12 @@ fun centerFile(inputName: String, outputName: String) {
     var maxLen = 0
     for (i in text)
         maxLen = kotlin.math.max(maxLen, i.trim().length)
+    val even = maxLen % 2
     maxLen /= 2
-    for (i in text)
-        out.write("".padEnd(maxLen - (i.trim().length) / 2) + i.trim() + "\n")
+    for (i in text) {
+        out.write("".padEnd(maxLen - (i.trim().length) / 2 - if (even - i.trim().length % 2 == -1) 1 else 0))
+        out.write(i.trim() + "\n")
+    }
     out.close()
 }
 
