@@ -3,9 +3,11 @@
 package lesson7.task1
 
 import java.io.File
+import kotlin.math.max
 
 fun main(args: Array<String>) {
     println("a".toRegex().findAll("a a a a a").toList().map { it.value })
+    println("".padEnd(2, 'a'))
 }
 
 /**
@@ -103,7 +105,15 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    val out = File(outputName).bufferedWriter()
+    val text = File(inputName).bufferedReader().readLines()
+    var maxLen = 0
+    for (i in text)
+        maxLen = kotlin.math.max(maxLen, i.trim().length)
+    maxLen /= 2
+    for (i in text)
+        out.write("".padEnd(maxLen - (i.trim().length) / 2) + i.trim() + "\n")
+    out.close()
 }
 
 /**
