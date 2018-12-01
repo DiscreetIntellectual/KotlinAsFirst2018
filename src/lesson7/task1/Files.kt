@@ -8,6 +8,7 @@ import kotlin.math.max
 fun main(args: Array<String>) {
     println("a".toRegex().findAll("a a a a a").toList().map { it.value })
     println("".padEnd(2, 'a'))
+    // вхождений ff в fff должно быть 2
 }
 
 /**
@@ -59,15 +60,23 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO() /*{
-    val text = File(inputName).bufferedReader().readLines().joinToString(separator = "").toLowerCase()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val text = File(inputName).bufferedReader().readText().toLowerCase()
     val ans = mutableMapOf<String, Int>()
-    for (i in 0 until substrings.size) {
-        ans[substrings[i]] = substrings[i].toLowerCase().toRegex().findAll(text).count()
+    var pos:Int
+    var count:Int
+    for (i in substrings) {
+        val j = i.toLowerCase()
+        pos = text.indexOf(j)
+        count = 0
+        while (pos != -1) {
+            count++
+            pos = text.indexOf(j, pos + 1)
+        }
+        ans[i] = count
     }
     return ans
 }
-*/
 
 
 /**

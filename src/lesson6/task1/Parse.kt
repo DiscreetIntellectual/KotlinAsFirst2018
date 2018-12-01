@@ -118,9 +118,6 @@ fun dateDigitToStr(digital: String): String {
     catch (e: NumberFormatException) {
         return ""
     }
-    catch (e: IndexOutOfBoundsException) {
-        return ""
-    }
 }
 
 /**
@@ -135,7 +132,10 @@ fun dateDigitToStr(digital: String): String {
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    val number = phone.filterNot { it in setOf(' ', '(', ')', '-') }
+    return if (number.all { it in "0123456789+" }) number else ""
+}
 
 /**
  * Средняя
@@ -149,7 +149,7 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  */
 fun bestLongJump(jumps: String): Int {
     return try {
-        (jumps.split(" ").filterNot { it in setOf("-", "%", "") }.map { it.toInt() } + listOf(-1)).max()!!
+        (jumps.split(" ").filterNot { it in setOf("-", "%", "") }.map { it.toInt() }).max() ?: -1
     }
     catch (e: NumberFormatException) {
         return -1
