@@ -63,7 +63,8 @@ fun main(args: Array<String>) {
         println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
     }
     println(String.format("%02d", null))*/
-    println(bestLongJump("-  - -  %    - 22"))
+    println(1)
+    println("\\+?[- ]*\\d[- 0-9]*\\([- ]*\\d[- 0-9]*\\)[- 0-9]*".toRegex().matches("+1(2)3"))
 }
 
 
@@ -133,8 +134,11 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String {
-    val number = phone.filterNot { it in setOf(' ', '(', ')', '-') }
-    return if (number.all { it in "0123456789+" }) number else ""
+    return if ("\\+[- ]*\\d[- 0-9]*\\([- ]*\\d[- 0-9]*\\)[- 0-9]*".toRegex().matches(phone) ||
+            "\\+?[- ]*\\d[- 0-9]*".toRegex().matches(phone) ||
+            "[- 0-9]*\\([- ]*\\d[- 0-9]*\\)[- 0-9]*".toRegex().matches(phone))
+        phone.filterNot { it in setOf(' ', '(', ')', '-') }
+    else ""
 }
 
 /**

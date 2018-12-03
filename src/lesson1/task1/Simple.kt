@@ -46,37 +46,6 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
     return x1 * x2 // Результат
 }
 
-/**
- * Пример главной функции
- */
-fun main(args: Array<String>) {
-    val x1x2 = quadraticRootProduct(1.0, 13.0, 42.0)
-    println("Root product: $x1x2")
-
-    val sec = seconds(8, 20, 35)
-    println("$sec seconds passed since the start of the day")
-
-    val meters = lengthInMeters(8, 2, 11)
-    println("$meters is the resulting length")
-
-    val radians = angleInRadian(36, 14, 35)
-    println("$radians is the angle in radians")
-
-    val dist = trackLength(3.0, 0.0, 0.0, 4.0)
-    println("$dist is the length of the vector")
-
-    val three = thirdDigit(3801)
-    println("$three is the third digit of the number")
-
-    val timetravel = travelMinutes(9, 25, 13, 1)
-    println("$timetravel is the time you've traveled by train")
-
-    val money = accountInThreeYears(13, 100)
-    println("$money is the resulting deposit")
-
-    val bringBackPython = numberRevert(478)
-    println("$bringBackPython is your number if you live in Japan")
-}
 
 /**
  * Тривиальная
@@ -150,3 +119,10 @@ fun accountInThreeYears(initial: Int, percent: Int): Double =
  */
 fun numberRevert(number: Int): Int =
         number % 10 * 100 + number / 10 % 10 * 10 + number / 100 % 10
+
+/**
+ * Пример главной функции
+ */
+fun main(args: Array<String>) {
+    println(1 + 2)
+}

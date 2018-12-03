@@ -1,6 +1,7 @@
 package lesson1.task1
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import kotlin.math.PI
@@ -105,4 +106,5 @@ class Tests {
         assertEquals(874, numberRevert(478))
         assertEquals(201, numberRevert(102))
     }
+
 }
