@@ -194,7 +194,7 @@ fun lineBySegment(s: Segment): Line = lineByPoints(s.begin, s.end)
  * Построить прямую по двум точкам
  */
 fun lineByPoints(a: Point, b: Point): Line =
-        Line(a, acos(abs(b.x - a.x) / a.distance(b)))
+        Line(a, acos((b.x - a.x) / a.distance(b)))
 
 /**
  * Сложная
