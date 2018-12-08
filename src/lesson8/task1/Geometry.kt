@@ -104,6 +104,9 @@ data class Segment(val begin: Point, val end: Point) {
 fun main(args: Array<String>) {
     //val list = mutableListOf(Point(1.0, 2.0), Point(2.0, 2.0))
     println(Line(Point(0.0, 0.0), PI / 4))
+    val a = Point(-5e-324, 0.40042948277001067)
+    val b = Point(-632.0, -632.0)
+    println(lineByPoints(a, b))
 }
 
 /**
@@ -193,8 +196,11 @@ fun lineBySegment(s: Segment): Line = lineByPoints(s.begin, s.end)
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line =
+fun lineByPoints(a: Point, b: Point): Line {
+    return if (b.y >= a.y)
         Line(a, acos((b.x - a.x) / a.distance(b)) % PI)
+    else Line(b, acos((a.x - b.x) / a.distance(b)) % PI)
+}
 
 /**
  * Сложная
