@@ -8,6 +8,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.math.acos
 import kotlin.math.abs
+import kotlin.math.tan
 
 /**
  * Точка на плоскости
@@ -102,11 +103,8 @@ data class Segment(val begin: Point, val end: Point) {
 }
 
 fun main(args: Array<String>) {
-    //val list = mutableListOf(Point(1.0, 2.0), Point(2.0, 2.0))
-    println(Line(Point(0.0, 0.0), PI / 4))
-    val a = Point(-5e-324, 0.40042948277001067)
-    val b = Point(-632.0, -632.0)
-    println(lineByPoints(a, b))
+    println(Line(Point(3.0, 3.0), PI / 2).crossPoint(Line(Point(0.0, 0.0), PI / 6)))
+    println(circleByThreePoints(Point(0.0, 0.0), Point(10.0, 0.0), Point(2.0, 1.0)))
 }
 
 /**
@@ -150,7 +148,7 @@ class Line private constructor(val b: Double, val angle: Double) {
      * Найти точку пересечения с другой линией.
      * Для этого необходимо составить и решить систему из двух уравнений (каждое для своей прямой)
      */
-    fun crossPoint(other: Line): Point = TODO() /*{
+    fun crossPoint(other: Line): Point {
         // equation is y = x * tg(angle) + b / cos(angle)
         // next equation is x * tg(a1) + b1 / cos(a1) = x * tg(a2) + b2 / cos(a2)
         // x = (b2 / cos(a2) - b1 / cos(a1)) / (tg(a1) - tg(a2)
@@ -162,16 +160,21 @@ class Line private constructor(val b: Double, val angle: Double) {
              if (b != other.b)
                  Point(0.0, 0.0)
             else
-                if (angle != PI / 2) Point(0.0, b / cos(angle)) else Point(0.0, 0.0)
+                if (angle != PI / 2) Point(0.0, b / cos(angle)) else Point(-b, 0.0)
         }
         else {
-            val x = (other.b * cos(angle) - b * cos(other.angle))
-            Point(x, )
+            if (angle == PI / 2)
+                Point(-b, -b * tan(other.angle) + other.b / cos(other.angle))
+            else {
+                val x = (other.b * cos(angle) - b * cos(other.angle)) /
+                        (sin(angle) * cos(other.angle) - sin(other.angle) * cos(angle))
+                Point(x, x * tan(angle) + b / cos(angle))
+            }
         }
         // Well.. what should I return, if these lines are parallel?
 
     }
-    */
+
 
     override fun equals(other: Any?) = other is Line && angle == other.angle && b == other.b
 
@@ -227,7 +230,10 @@ fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> = TODO()
  * (построить окружность по трём точкам, или
  * построить окружность, описанную вокруг треугольника - эквивалентная задача).
  */
-fun circleByThreePoints(a: Point, b: Point, c: Point): Circle = TODO()
+fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
+    val center = bisectorByPoints(a, b).crossPoint(bisectorByPoints(b, c))
+    return Circle(center, center.distance(a))
+}
 
 /**
  * Очень сложная
