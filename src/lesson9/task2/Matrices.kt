@@ -47,6 +47,9 @@ operator fun Matrix<Int>.plus(other: Matrix<Int>): Matrix<Int> {
     return result
 }
 
+fun main(args: Array<String>) {
+    println(generateSpiral(3, 4))
+}
 /**
  * Сложная
  *
@@ -59,7 +62,23 @@ operator fun Matrix<Int>.plus(other: Matrix<Int>): Matrix<Int> {
  * 10 11 12  5
  *  9  8  7  6
  */
-fun generateSpiral(height: Int, width: Int): Matrix<Int> = TODO()
+fun generateSpiral(height: Int, width: Int): Matrix<Int> {
+    var i = 0
+    var j = 0
+    var deltaI = 0
+    var deltaJ = 1
+    var number = 1
+    val matrix = createMatrix(height, width, 0)
+    while (number <= height * width) {
+        matrix[i, j] = number++
+        if (i + deltaI > height - 1 || i + deltaI < 0 || j + deltaJ > width - 1 || j + deltaJ < 0 ||
+                matrix[i + deltaI, j + deltaJ] > 0)
+            deltaI = deltaJ.also { deltaJ = -deltaI }
+        i += deltaI
+        j += deltaJ
+    }
+    return matrix
+}
 
 /**
  * Сложная

@@ -83,8 +83,10 @@ class MatrixImpl<E>(override val height: Int, override val width: Int, e: E) : M
     override fun toString(): String {
         val str = StringBuilder()
         for (i in 0 until height)
-            for (j in 0 until width)
+            for (j in 0 until width) {
                 str.append(list[i][j])
+                str.append(if (j < width - 1) ' ' else '\n')
+            }
         return str.toString()
     }
 
