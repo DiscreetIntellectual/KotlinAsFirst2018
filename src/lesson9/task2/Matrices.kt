@@ -48,7 +48,7 @@ operator fun Matrix<Int>.plus(other: Matrix<Int>): Matrix<Int> {
 }
 
 fun main(args: Array<String>) {
-    println(generateSpiral(3, 4))
+    println(generateRectangles(5, 10))
 }
 /**
  * Сложная
@@ -94,7 +94,29 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> {
  *  1  2  2  2  2  1
  *  1  1  1  1  1  1
  */
-fun generateRectangles(height: Int, width: Int): Matrix<Int> = TODO()
+
+fun generateRectangles(height: Int, width: Int): Matrix<Int> {
+    var number = 1
+    val matrix = createMatrix(height, width, 0)
+    val midI = height / 2 + if (height % 2 == 1) 1 else 0
+    val midJ = width / 2 + if (width % 2 == 1) 1 else 0
+    for (i in 0 until midI) {
+        for (j in i until width - i) {
+            matrix[i, j] = number
+            matrix[height - i - 1, j] = number
+        }
+        number++
+    }
+    number = 1
+    for (j in 0 until midJ){
+        for (i in j + 1 until height - j - 1) {
+            matrix[i, j] = number
+            matrix[i, width - j - 1] = number
+        }
+        number++
+    }
+    return matrix
+}
 
 /**
  * Сложная
